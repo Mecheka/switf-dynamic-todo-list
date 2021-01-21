@@ -21,7 +21,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final BehaviorSubject<int> _$selectScreen = BehaviorSubject.seeded(0);
 
-  PageController _controller = PageController(initialPage: 0, keepPage: true);
+  @override
+  void dispose() {
+    _$selectScreen.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,6 @@ class _MyAppState extends State<MyApp> {
                   stream: _$selectScreen,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      final _selectScreen = snapshot.data;
                       return Scaffold(
                         body: TodoListScreen(),
                       );
@@ -58,9 +61,5 @@ class _MyAppState extends State<MyApp> {
         'create': (BuildContext context) => CreateTodoListScreen.create()
       },
     );
-  }
-
-  _changePage(int index) {
-    _$selectScreen.add(index);
   }
 }
